@@ -1,75 +1,23 @@
-name: CI Workflow for ASP.NET Core + ReactJS
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+# Assuming your ASP.NET Core project is in a 'backend' folder
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout code
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Set up .NET SDK for ASP.NET Core build
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '6.0' # Change this to your version of .NET (e.g., 5.0, 7.0)
+        dotnet-version: '6.0' # Adjust this version based on your project
 
-    # Step 3: Restore .NET dependencies
     - name: Restore .NET dependencies
-      run: dotnet restore
+      run: dotnet restore ./backend/your-project-file.csproj  # Path to your .csproj file
 
-    # Step 4: Build ASP.NET Core application
     - name: Build ASP.NET Core app
-      run: dotnet build --configuration Release
+      run: dotnet build ./backend/your-project-file.csproj --configuration Release  # Specify path to .csproj
 
-    # Step 5: Run tests for ASP.NET Core app
     - name: Run tests for ASP.NET Core app
-      run: dotnet test --configuration Release
-
-    # Step 6: Set up Node.js for ReactJS build
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16' # Adjust the version to match your React app
-
-    # Step 7: Install Node.js dependencies (for React app)
-    - name: Install React dependencies
-      run: npm install
-      working-directory: ./client # Assuming your React app is in the "client" folder
-
-    # Step 8: Build React application
-    - name: Build React app
-      run: npm run build
-      working-directory: ./client
-
-    # Step 9: Run tests for React app (if applicable)
-    - name: Run tests for React app
-      run: npm test -- --ci --silent --coverage
-      working-directory: ./client
-
-    # Optional Step: Deploy the backend and frontend
-    # This depends on your hosting method. Here is an example of deploying to Azure Web App for both:
-    # - name: Deploy Backend to Azure
-    #   uses: Azure/webapps-deploy@v2
-    #   with:
-    #     app-name: 'your-backend-app-name'
-    #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-    #     package: './path-to-your-backend-publish-folder'
-    
-    # - name: Deploy Frontend to Azure
-    #   uses: Azure/webapps-deploy@v2
-    #   with:
-    #     app-name: 'your-frontend-app-name'
-    #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-    #     package: './client/build' # React build output directory
-
-
+      run: dotnet test ./backend/your-project-file.csproj --configuration Release  # Specify path to .csproj
